@@ -1,5 +1,6 @@
 from django.db import models
 
+
 ROLES= (
 ('1','Invitado'),
 ('2', 'Miembro'),
@@ -9,7 +10,6 @@ ROLES= (
 
 
 
-description = forms.ModelMultipleChoiceField(queryset=User.objects.all())
 
 # Create your models here.
 class Contact(models.Model):
@@ -17,7 +17,7 @@ class Contact(models.Model):
     last_name=models.CharField(max_length=60)
     e_mail=models.EmailField()
     cellphone=models.CharField(max_length=15)
-    tellpohone=models.CharField(max_length=15)
+    tellphonne=models.CharField(max_length=15)
 
     class meta:
         abstract= True
@@ -38,6 +38,8 @@ class Person(Contact , Address):
     cell = models.ForeignKey()
     organization = models.ForeignKey('Iglesia u organizacion', max_length=80)
     role= models.CharField('Rol',choices=ROLES,max_length=80)
+    pic = models.FileField()
+
 
     def __unicode__(self):
         return '%s %s' % (self.name)
