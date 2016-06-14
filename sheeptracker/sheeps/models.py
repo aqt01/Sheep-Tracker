@@ -1,5 +1,6 @@
 from django.db import models
 
+from django.contrib.auth.models import User
 
 ROLES= (
 ('1','Invitado'),
@@ -12,15 +13,6 @@ ROLES= (
 
 
 # Create your models here.
-class Contact(models.Model):
-    name = models.CharField(max_length=60)
-    last_name=models.CharField(max_length=60)
-    e_mail=models.EmailField()
-    cellphone=models.CharField(max_length=15)
-    tellphonne=models.CharField(max_length=15)
-
-    class meta:
-        abstract= True
 
 class Address(models.Model):
     country=models.CharField("Pais",max_length=60) # This can be changed to an external field?
@@ -34,9 +26,23 @@ class Address(models.Model):
     class meta:
         abstract = True
 
-class Person(Contact , Address):
-    cell = models.ForeignKey()
-    organization = models.ForeignKey('Iglesia u organizacion', max_length=80)
+class Contact(Address):
+    name = models.CharField(max_length=60)
+    last_name=models.CharField(max_length=60)
+    e_mail=models.EmailField()
+    cellphone=models.CharField(max_length=15)
+    tellphone=models.CharField(max_length=15)
+
+    class meta:
+        abstract= True
+
+
+class Person(Contact):
+
+
+    user = models.OneToOneField(User)
+    #cell = models.ForeignKey()
+    #organization = models.ForeignKey('Iglesia u organizacion', max_length=80)
     role= models.CharField('Rol',choices=ROLES,max_length=80)
     pic = models.FileField()
 

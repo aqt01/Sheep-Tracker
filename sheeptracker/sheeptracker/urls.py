@@ -9,6 +9,21 @@ from mezzanine.core.views import direct_to_template
 from mezzanine.conf import settings
 
 
+from django.contrib.auth.models import User,Group
+
+from django.views.generic import TemplateView
+
+from django.contrib.auth.models import User
+from rest_framework import routers, serializers, viewsets
+from sheeps.views import *
+from sheeps.serializers import *
+
+
+# Routers provide an easy way of automatically determining the URL conf.
+router = routers.DefaultRouter()
+router.register(r'users', UserViewSet)
+router.register(r'person', PersonViewSet)
+
 admin.autodiscover()
 
 # Add the urlpatterns for any custom Django applications here.
@@ -36,6 +51,8 @@ urlpatterns += [
     # commented out like the others, so it's the default. You only need
     # one homepage pattern, so if you use a different one, comment this
     # one out.
+    url(r'^api/', include(router.urls)),
+    url(r'^api/docs/', include('rest_framework_swagger.urls')),
 
     url("^$", direct_to_template, {"template": "index.html"}, name="home"),
 
