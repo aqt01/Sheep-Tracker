@@ -1,0 +1,94 @@
+from django.db import models
+
+from django.contrib.auth.models import User
+
+ROLES= (
+('1','Invitado'),
+('2', 'Miembro'),
+('3', 'Lider'),
+('4', 'Lider'),
+('5','Pastor/a'),
+('6','Pastor/a general'),)
+
+
+
+# Create your models here.
+
+# we must connect this with geomap
+class Address(models.Model):
+    country=models.CharField("Country",max_length=60) # This can be changed to an external field?
+    state=models.CharField("State/Province",max_length=60)
+    area=models.CharField("Area",max_length=60)
+    street=models.CharField("Street",max_length=60)
+    home=models.CharField("# ", max_length=60)
+    perimeter=models.IntegerField('Perimeter',null=True) # must hide this is not for this release
+    # geolocation=
+
+    class meta:
+        abstract = True
+
+class Contact(Address):
+    name = models.CharField(max_length=60)
+    last_name=models.CharField(max_length=60)
+    e_mail=models.EmailField()
+    cellphone=models.CharField(max_length=15)
+    tellphone=models.CharField(max_length=15)
+    birthdate=models.DateField('Birthdate')
+
+    class meta:
+        abstract= True
+
+class Organization(models.Model):
+    name =  models.CharField('Name',max_length=120)
+    e_mail = models.CharField('E-mail',max_length=120)
+
+    country=models.CharField("Country",max_length=60) # This can be changed to an external field?
+    state=models.CharField("State/Province",max_length=60)
+    area=models.CharField("Area",max_length=60)
+    street=models.CharField("Street",max_length=60)
+    home=models.CharField("# ", max_length=60)
+    perimeter=models.IntegerField('Perimeter',null=True) # must hide this is not for this release
+    # geolocation=
+
+
+    #staff= models.ManyToManyField(Person) # Church staff ?
+
+    # need social media connections
+
+
+class Person(Contact):
+    user = models.OneToOneField(User)
+    role= models.CharField('Role',choices=ROLES,max_length=80)
+    pic = models.FileField()
+    organization_visit = models.ForeignKey(Organization,related_name='organization_person')
+
+    def __unicode__(self):
+        return '%s %s' % (self.name)
+
+
+
+
+class Cell(Address):
+    name =  models.CharField('Name',max_length=120)
+    guests = models.ManyToManyField(Person,max_length=120,related_name='guests') #this are members if cell is chosen as church
+    consolidators= models.ManyToManyField(Person,related_name='consolidators') # Church staff ?
+    isChurch =models.BooleanField('Is a church?', default=False)
+    supervisor = models.ManyToManyField(Person,related_name='supervisors')
+    organization = models.ForeignKey(Organization,related_name='organization_cell')
+    # we need a schedule for the cell
+
+
+# must heredate from userprofile
+class assistance_avg(models.Model):
+    assistance_avg=models.FloatField('avrg of assistance') #Assist avrg of a particular cell
+    start_date=models.DateField('From') # the created date of the cell
+    end_date=models.DateField('To') # the last checked assistance
+
+# every saved instance
+
+class assistance(models.Model):
+    cell=models.ForeignKey(Cell)
+    assistance_avg=models.FloatField('promedio de asistencia') #Assis average
+    guests=models.ManyToManyField(Person)
+
+# every saved instance on assistance will recalculate the assistance avg for their cell
