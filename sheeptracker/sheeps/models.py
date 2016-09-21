@@ -1,30 +1,52 @@
 from django.db import models
 
+from django.contrib.auth.models import User
+
+ROLES= (
+('1','Invitado'),
+('2', 'Miembro'),
+('3', 'Lider'),
+('4','Pastor/a'),
+('5','Pastor/a general'),)
+
+
+
+
 # Create your models here.
 
-class Cell(models.Model):
-    organization = ForeignKey(Organization)
-    address = OneToOneField(Address)
-
-class SocialMedia(models.Model):
-    name = models.CharField()
-    contact = ForeignKey(Contact)
-    
 class Address(models.Model):
-    
+    country=models.CharField("Pais",max_length=60) # This can be changed to an external field?
+    state=models.CharField("Estado/Pronvicia",max_length=60)
+    area=models.CharField("Area",max_length=60)
+    street=models.CharField("Calle",max_length=60)
+    home=models.CharField("# Casa", max_length=60)
+    perimeter=models.IntegerField('Perimetro')
+    # geolocation=
 
-# this is meta
-class Contact(models.Model):
-    name = models.CharField(max_length=80)
-    last_name = models.CharField(max_length=80)
-    email = models.EmailField()
-    # Should be replaced with number fields
-    cellphone = models.CharField(max_length=10)
-    telephone = models.CharField(max_length=10)
+    class meta:
+        abstract = True
+
+class Contact(Address):
+    name = models.CharField(max_length=60)
+    last_name=models.CharField(max_length=60)
+    e_mail=models.EmailField()
+    cellphone=models.CharField(max_length=15)
+    tellphone=models.CharField(max_length=15)
+
+    class meta:
+        abstract= True
+
+
+class Person(Contact):
+
+
+    user = models.OneToOneField(User)
+    #cell = models.ForeignKey()
+    #organization = models.ForeignKey('Iglesia u organizacion', max_length=80)
+    role= models.CharField('Rol',choices=ROLES,max_length=80)
     pic = models.FileField()
 
 
-class Member(Contact):
-    organization = ForeignKey(Organization)
-    
-    
+    def __unicode__(self):
+        return '%s %s' % (self.name)
+
