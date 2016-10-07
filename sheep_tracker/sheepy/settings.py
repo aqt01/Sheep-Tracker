@@ -105,22 +105,7 @@ TEMPLATES = [
     },
 ]
 
-
-MIDDLEWARE_CLASSES = (
-    'cms.middleware.utils.ApphookReloadMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'cms.middleware.user.CurrentUserMiddleware',
-    'cms.middleware.page.CurrentPageMiddleware',
-    'cms.middleware.toolbar.ToolbarMiddleware',
-    'cms.middleware.language.LanguageCookieMiddleware'
-)
-
+	
 INSTALLED_APPS = (
     'djangocms_admin_style',
     'django.contrib.auth',
@@ -150,7 +135,33 @@ INSTALLED_APPS = (
     'djangocms_video',
     'sheepy',
     'sheeps',
+    'rest_framework',
+    'fontawesome',
+    'corsheaders',
+    'materialize',
 )
+
+
+MIDDLEWARE_CLASSES = (
+    'cms.middleware.utils.ApphookReloadMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'cms.middleware.user.CurrentUserMiddleware',
+    'cms.middleware.page.CurrentPageMiddleware',
+    'cms.middleware.toolbar.ToolbarMiddleware',
+    'cms.middleware.language.LanguageCookieMiddleware',
+    # CORS HEADERS
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+
+)
+
+
 
 LANGUAGES = (
     ## Customize this
@@ -208,3 +219,16 @@ THUMBNAIL_PROCESSORS = (
     'filer.thumbnail_processors.scale_and_crop_with_subject_location',
     'easy_thumbnails.processors.filters'
 )
+
+# --- CORS CONFIG ---
+CORS_ORIGIN_ALLOW_ALL = False
+
+# --- REST_FRAMEWORK ---
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
+

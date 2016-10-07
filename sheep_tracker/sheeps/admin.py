@@ -4,7 +4,7 @@ from django.contrib import admin
 
 from .models import *
 
-
+'''
 class ChoiceInline(admin.TabularInline):
     model = Choice
     readonly_fields = ('votes',)
@@ -21,12 +21,30 @@ class PollAdmin(admin.ModelAdmin):
     list_display = ('question',)
     search_fields = ['question']
 
+'''
 
-admin.site.register(Contact, ContactAdmin)
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+class OrganizationAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+
+class AddressAdmin(admin.ModelAdmin):
+    pass
+class PersonAdmin(admin.ModelAdmin):
+    pass
+
+class LocationAdmin(admin.ModelAdmin):
+    pass
+
+
+
+
 admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(Address, AddressAdmin)
 
-admin.site.register(Cell, CellAdmin)
+admin.site.register(Location, LocationAdmin)
 admin.site.register(Person, PersonAdmin)
 
 
